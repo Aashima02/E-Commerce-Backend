@@ -1,28 +1,24 @@
-# Use the official OpenJDK image as a parent image
-FROM openjdk:17-jre-slim
+# Use the official Eclipse Temurin image for JDK 17
+FROM eclipse-temurin:17-jre-alpine
 
-# Set the working directory
+# Set the working directory inside the container
 WORKDIR /app
 
-# Copy the Gradle wrapper and build scripts
-COPY gradlew gradlew
-COPY gradle gradle
-COPY build.gradle settings.gradle /app/
+# Copy the entire project to the working directory
+COPY . .
 
-# Copy the application source
-COPY src /app/src
+# Build the project using the Gradle wrapper
+RUN ./gradlew build
 
-# Grant execution rights to the Gradle wrapper
-RUN chmod +x gradlew
-
-# Build the application
-RUN ./gradlew build -x test
-
-# Copy the built jar file to the container
+# Copy the built JAR file to the app directory
 COPY build/libs/*.jar app.jar
 
-# Run the jar file
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Specify the entrypoint for the container to run the application
+ENTRYPOINT ["java", "-jar", "/app.jar"]
+
+# Expose port 8080 to the host machine
+EXPOSE 8080
+
 
 
 # FROM eclipse-temurin:17-jdk-alpine
