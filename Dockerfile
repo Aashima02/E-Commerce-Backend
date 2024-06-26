@@ -7,6 +7,9 @@ WORKDIR /app
 # Copy the entire project to the working directory
 COPY . .
 
+# Grant execute permissions on the Gradle wrapper script
+RUN chmod +x ./gradlew
+
 # Build the project using the Gradle wrapper
 RUN ./gradlew build
 
@@ -18,7 +21,6 @@ ENTRYPOINT ["java", "-jar", "/app.jar"]
 
 # Expose port 8080 to the host machine
 EXPOSE 8080
-
 
 
 # FROM eclipse-temurin:17-jdk-alpine
